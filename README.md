@@ -73,3 +73,10 @@ Implementation available under:
 ## Status
 
 Academic project — completed.
+
+---
+
+## Collaboration
+
+Team project (3 members) – MSc Distributed Systems  
+Co-developers: [Vasilis-Kotsis Ektoras, Leonidas Papadopoulos]
