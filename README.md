@@ -29,6 +29,20 @@ High-level pipeline:
 
 ---
 
+## Video Analytics Implementation
+
+The video analytics component includes a YOLOv8 + DeepSORT pipeline for:
+
+- Vehicle detection
+- Multi-object tracking
+- Speed estimation per vehicle
+- Lane-based analysis
+
+Implementation available under:
+`analytics/video_tracking/YOLOv8_DeepSORT_Tracking_SpeedEstimation.ipynb`
+
+---
+
 ## Deliverables Covered
 
 - Data pipeline design (batch + streaming components)
