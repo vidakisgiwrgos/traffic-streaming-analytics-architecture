@@ -1,94 +1,124 @@
-# Real-Time Traffic Monitoring — Distributed Cloud Pipeline (Azure)
+# Real-Time Traffic Monitoring System  
+Cloud-Based Distributed Video Analytics (Azure + YOLOv8)
 
-A distributed cloud-based pipeline designed for real-time traffic monitoring using streamed video data, preprocessing, analytics, and alerting.
-
-This repository documents the system architecture, design decisions, and deliverables (portfolio-style case study).  
-*Code is not included (lost after course completion); the repo focuses on architecture and system design.*
-
----
-
-## Goals
-
-- Process live traffic camera streams
-- Preprocess video into short clips (2-minute segments)
-- Run video analytics (vehicle tracking / speed estimation)
-- Store results and compute per-interval statistics (e.g., every 5 minutes)
-- Trigger real-time alerts (e.g., overspeed events)
+A distributed, event-driven traffic monitoring pipeline built on Azure Functions.  
+The system performs automated vehicle detection, tracking and speed estimation using YOLOv8, stores structured analytics in Azure SQL, and triggers real-time alerts via Service Bus.
 
 ---
 
-## System Overview
+## System Architecture
 
-High-level pipeline:
+The system follows an event-driven cloud architecture:
 
-1. **Input Streams**: traffic camera streams (2 directions, multiple lanes)
-2. **Preprocessing**: clip generation (2-minute clips), naming & organization in storage
-3. **Video Analytics**: vehicle tracking and speed computation
-4. **Storage / Analytics Layer**: aggregated outputs and metrics
-5. **Alerts**: real-time notifications for rule violations (e.g., speed limit)
+1. HTTP Trigger — Video Splitter  
+   - Splits raw traffic video into 2-minute segments (FFmpeg)
+   - Stores segments in Azure Blob Storage
 
----
+2. Blob Trigger — Video Processor  
+   - Loads YOLOv8 (Ultralytics)
+   - Performs multi-object tracking (persistent IDs)
+   - Computes speed using ROI-based real-world calibration
+   - Separates inbound / outbound lanes
+   - Inserts structured results into Azure SQL
+   - Publishes overspeed events to Azure Service Bus
 
-## Video Analytics Implementation
+3. Service Bus Trigger — Real-Time Alerts  
+   - Consumes overspeed events
+   - Generates alert logs / notifications
 
-The video analytics component includes a YOLOv8 + DeepSORT pipeline for:
-
-- Vehicle detection
-- Multi-object tracking
-- Speed estimation per vehicle
-- Lane-based analysis
-
-Implementation available under:
-`analytics/video_tracking/YOLOv8_DeepSORT_Tracking_SpeedEstimation.ipynb`
+![Architecture](diagrams/architecture.jpg)
 
 ---
 
-## Deliverables Covered
+## Computer Vision Module
 
-- Data pipeline design (batch + streaming components)
-- Clip storage conventions and preprocessing logic
-- Metric computation (counts, averages, peaks)
-- Alerting logic for overspeed events
-- Discussion of scalability and operational constraints
+Vehicle detection and speed estimation implemented using:
+
+- YOLOv8 (Ultralytics)
+- Persistent multi-object tracking
+- ROI-based speed calculation (20m real-world distance)
+- Frame-based timestamp calculation
+- Inbound / Outbound lane segmentation
+
+Speed formula:
+
+Speed (km/h) = (Real Distance / Time in ROI) × 3.6
 
 ---
 
 ## Repository Structure
+functions/
+├── splitter/ → HTTP-triggered video segmentation
+├── processor/ → Blob-triggered YOLOv8 processing
+└── alerts/ → Service Bus real-time alerts
 
-- `docs/` — Design notes, assumptions, decisions
-- `diagrams/` — Architecture diagrams
-- `report/` — Report / deliverables (if available)
-- `assets/` — Images used in documentation
+analytics/
+└── video_tracking/ → CV logic & tracking experiments
+
+diagrams/ → System architecture diagrams
+logs/ → Sample analytics logs
+data_samples/ → Demo videos
+docs/ → Design documentation
+
 
 ---
 
-## Tech Stack (planned / used)
+## Demo
 
-- Azure (storage + compute + streaming components)
-- Python (analytics scripting)
-- Computer Vision module (vehicle tracking / speed estimation)
+### Raw Input (Preview)
+![Raw](data_samples/traffic-raw.gif)
+
+Full video: [traffic-raw.mp4](data_samples/traffic-raw.mp4)
+
+### Processed Output (Preview)
+![Output](assets/traffic-output.gif)
+
+Full video: [traffic-output.mp4](assets/traffic-output.mp4)
+
+---
+
+## Azure Components Used
+
+- Azure Functions (HTTP / Blob / Service Bus triggers)
+- Azure Blob Storage
+- Azure SQL Database
+- Azure Service Bus
+- Event-driven architecture
+
+---
+
+## Data Model (Stored in SQL)
+
+Each processed vehicle record includes:
+
+- vehicle_id
+- speed
+- vehicle_type (Car / Truck)
+- timestamp
+- stream (Inbound / Outbound)
+- camera
+
+Sample logs available in:
+`logs/traffic_log.txt`
+
+---
+
+## Configuration
+
+Secrets are NOT included in this repository.
+
+Use environment variables for:
+
+- VideoConnectionString
+- SqlConnectionString
+- ServiceBusConnectionString
+
+A template file is provided:
+
+`local.settings.example.json`
 
 ---
 
 ## Status
 
-Academic project — completed.
-
----
-
-## Collaboration
-
-Team project (3 members) – MSc Distributed Systems  
-Co-developers: [Vasilis-Kotsis Ektoras, Leonidas Papadopoulos]
-
-## Demo
-
-### Raw input (preview)
-![Raw demo](data_samples/traffic-raw.gif)
-
-Full video: [traffic-raw.mp4](data_samples/traffic-raw.mp4)
-
-### Output (preview)
-![Output demo](assets/traffic-output.gif)
-
-Full video: [traffic-output.mp4](assets/traffic-output.mp4)
+Academic distributed systems project — completed. ✅
