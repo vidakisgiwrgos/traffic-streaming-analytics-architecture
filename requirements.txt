@@ -1,5 +1,8 @@
+azure-functions
+azure-storage-blob
+azure-servicebus
+pyodbc
 ultralytics
 opencv-python
-deep-sort-realtime
 numpy
-torch
+python-dotenv
