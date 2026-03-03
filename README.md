@@ -80,3 +80,11 @@ Academic project — completed.
 
 Team project (3 members) – MSc Distributed Systems  
 Co-developers: [Vasilis-Kotsis Ektoras, Leonidas Papadopoulos]
+
+## Demo
+
+### Raw input
+![Raw Traffic](data_samples/traffic-raw.mp4)
+
+### Output (Car identification, inbound/outbound seperation, speed estiamtion)
+![Output_Demo](assets/traffic-output.mp4)
