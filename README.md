@@ -83,8 +83,5 @@ Co-developers: [Vasilis-Kotsis Ektoras, Leonidas Papadopoulos]
 
 ## Demo
 
-### Raw input
-![Raw Traffic](data_samples/traffic-raw.mp4)
-
-### Output (Car identification, inbound/outbound seperation, speed estiamtion)
-![Output_Demo](assets/traffic-output.mp4)
+- Raw input video: [traffic-raw.mp4](data_samples/traffic-raw.mp4)
+- Output demo video: [traffic-output.mp4](assets/traffic-output.mp4)
