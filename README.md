@@ -83,5 +83,12 @@ Co-developers: [Vasilis-Kotsis Ektoras, Leonidas Papadopoulos]
 
 ## Demo
 
-- Raw input video: [traffic-raw.mp4](data_samples/traffic-raw.mp4)
-- Output demo video: [traffic-output.mp4](assets/traffic-output.mp4)
+### Raw input (preview)
+![Raw demo](assets/traffic-raw.gif)
+
+Full video: [traffic-raw.mp4](data_samples/traffic-raw.mp4)
+
+### Output (preview)
+![Output demo](assets/traffic-output.gif)
+
+Full video: [traffic-output.mp4](assets/traffic-output.mp4)
